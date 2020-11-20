@@ -6,7 +6,7 @@ const client = require('../client/client')
 router.get("/", (req, res) => {
   
   client
-      .query("SELECT * FROM restaurant")
+      .query("SELECT * FROM comment")
       .then((data) => res.json(data.rows))
       .catch((err) => res.sendStatus(500));
 });
@@ -15,16 +15,16 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   const { id } = req.params; 
   client
-      .query("SELECT * FROM restaurant WHERE id=$1", [id])
+      .query("SELECT * FROM comment WHERE id=$1", [id])
       .then((data) => res.json(data.rows))
       .catch((err) => res.sendStatus(500));
 });
 
 /* GET all restaurants page. */
 router.post("/", (req, res) => {
-  const { name, city_id } = req.body;
+  const { text, date, restaurant_id } = req.body;
   client
-      .query("INSERT INTO restaurant(name, city_id) VALUES($1, $2) RETURNING *", [name, city_id])
+      .query("INSERT INTO comment(text, date, restaurant_id) VALUES($1, $2, $3) RETURNING *", [text, date, restaurant_id])
       .then((data) => res.json(data.rows))
       .catch((err) => res.sendStatus(500));
 });
